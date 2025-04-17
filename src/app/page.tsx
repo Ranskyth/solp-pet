@@ -41,8 +41,6 @@ export default function Home() {
 
     RequestAnimaisAndDonos();
 
-    console.log(process.env.NEXT_PUBLIC_BACKEND_API)
-
     return () => {
       document.removeEventListener("click", handleAtivo);
     };
