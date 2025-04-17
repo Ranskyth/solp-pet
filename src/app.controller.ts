@@ -57,9 +57,17 @@ export class AppController {
   }
   @Get('/donos')
   async getDonos() {
-    const donos = await this.prisma.dono.findMany();
+    try {
+      const donos = await this.prisma.dono.findMany();
+
+    if(donos == undefined || donos == null){
+      return {mensagem : "nenhum cadastro no banco de dados"}
+    }
 
     return donos;
+    }catch{
+      return {error : "error in donos"}
+    }
   }
   @Put('/donos/:id')
   async UptadeDono(@Param() param: any, @Body() body: any) {
