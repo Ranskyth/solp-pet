@@ -14,16 +14,24 @@ import { PrismaClient } from '@prisma/client';
 
 @Controller()
 export class AppController {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaClient) { }
 
   @Post('/donos')
   async createDono(@Body() body: any) {
-    const { nome, animal, endereco, cpf, telefone } = body;
+    try{
+      const { nome, animal, telefone } = body;
 
-    const db = await this.prisma.dono.create({
-      data: { nome, telefone, animal, endereco, cpf },
-    });
-    return { mensagem: `Dono criado com sucesso com o id : ${db.id}` };
+      console.log(nome,telefone,animal)
+  
+      const db = await this.prisma.dono.create({
+        data: { nome, telefone, animal},
+      });
+      return { mensagem: `Dono criado com sucesso com o id : ${db.id}` };
+    }catch{
+      return {
+        mensagem: "error ao fazer o cadastro"
+      }
+    }
   }
   @Get()
   Main() {
@@ -41,6 +49,12 @@ export class AppController {
       mensagem: `Deletado o Dono com ID : ${Data.id}`,
     };
   }
+  @Get('/nomes/animal/dono')
+  async getAnimal() {
+    const animaisOnDonos = await this.prisma.animal.findMany({ select: { nome: true, dono: { select: { nome: true } } } });
+
+    return animaisOnDonos;
+  }
   @Get('/donos')
   async getDonos() {
     const donos = await this.prisma.dono.findMany();
@@ -50,10 +64,10 @@ export class AppController {
   @Put('/donos/:id')
   async UptadeDono(@Param() param: any, @Body() body: any) {
     const { id } = param;
-    const { animal, cpf, endereco, nome, telefone } = body;
+    const { animal, nome, telefone } = body;
     const db = await this.prisma.dono.update({
       where: { id },
-      data: { animal, cpf, endereco, nome, telefone },
+      data: { animal, nome, telefone },
     });
 
     return {

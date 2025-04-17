@@ -21,7 +21,7 @@ enum Tipo {
 model Animal {
   id    String @id @default(uuid())
   nome  String
-  idade Int
+  nascimento String
   tipo  Tipo   @default(Gato)
   raca  String
 
@@ -37,22 +37,11 @@ model Animal {
 model Dono {
   id       String     @id @default(uuid())
   nome     String
-  cpf      String
   telefone String?
   animal   Animal[]
-  endereco Endereco[]
+
+  create_at DateTime @default(now())
 
   @@map("dono")
 }
 
-model Endereco {
-  id          String  @id @default(uuid())
-  cep         String
-  rua         String
-  numero      Int
-  complemento String?
-  dono_id     String  @unique
-  dono        Dono    @relation(fields: [dono_id], references: [id], onDelete: Cascade)
-
-  @@map("endereco")
-}
