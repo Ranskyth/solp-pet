@@ -31,7 +31,7 @@ export default function Home() {
 
     const RequestAnimaisAndDonos = async () => {
       try {
-        const res = await fetch("http://localhost:3333/nomes/animal/dono");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/nomes/animal/dono`);
         const resjson = await res.json();
         setDataNames(resjson);
       } catch (error) {
@@ -48,13 +48,11 @@ export default function Home() {
 
   return (
     <div className="px-[65px] py-[30px]">
-          {ativo ? (
-            <div ref={refs} className="flex justify-center">
-      
-              <CardActions />
-      
-            </div>
-          ) : null}
+      {ativo ? (
+        <div ref={refs} className="flex justify-center">
+          <CardActions />
+        </div>
+      ) : null}
       <Header />
       <div className="my-6 flex gap-2">
         <div className="inline-flex items-center w-[85%] relative">
@@ -73,7 +71,6 @@ export default function Home() {
           Cadastrar
         </button>
       </div>
-
 
       <div className="grid gap-4 grid-cols-4 grid-rows-4">
         {dataNames?.map((x) => (
