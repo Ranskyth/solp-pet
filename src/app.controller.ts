@@ -51,9 +51,13 @@ export class AppController {
   }
   @Get('/nomes/animal/dono')
   async getAnimal() {
-    const animaisOnDonos = await this.prisma.animal.findMany({ select: { nome: true, dono: { select: { nome: true } } } });
-
-    return animaisOnDonos;
+    try{
+      const animaisOnDonos = await this.prisma.animal.findMany({ select: { nome: true, dono: { select: { nome: true } } } });
+  
+      return animaisOnDonos;
+    }catch(error){
+      return{error:`error in ${error}`}
+    }
   }
   @Get('/donos')
   async getDonos() {
