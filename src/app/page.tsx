@@ -45,7 +45,6 @@ export default function Home() {
       document.addEventListener("click", handleAtivo);
     }
 
-<<<<<<< HEAD
     const RequestAnimaisAndDonos = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/nomes/animal/dono`);
@@ -58,8 +57,6 @@ export default function Home() {
 
     RequestAnimaisAndDonos();
 
-=======
->>>>>>> 71bb7b3 (feat: update in cards)
     return () => {
       document.removeEventListener("click", handleAtivo);
     };
