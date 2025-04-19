@@ -1,9 +1,6 @@
-interface Props {
-  name: string;
-  placeholder?: string;
-}
+import { InputType } from "@/types/InputType";
 
-export const InputText = ({ name, placeholder }: Props) => {
+export const InputText = ({ name, placeholder }: InputType) => {
   return (
     <>
       <input

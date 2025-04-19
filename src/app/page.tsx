@@ -1,34 +1,51 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Header } from "./_components/header";
 import { Pagination } from "./_components/pagination";
 import { CardAnimais } from "./_components/card-animais";
 import { CardActions } from "./_components/card-actions";
+import { NameAnimaisAndDonosType } from "@/types/NameAnimaisAndDonosType";
+import { BACKEND_API } from "./api/api";
+import { CardActionsContext } from "./_components/context/card-actions-context";
 
-interface NameAnimaisAndDonosType {
-  nome: string;
-  dono: {
-    nome: string;
-  };
-}
+const RequestAnimaisAndDonos = async () => {
+  try {
+    const res = await fetch(`${BACKEND_API}/nomes/animal/dono`);
+    const resjson = await res.json();
+    return resjson;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
 
 export default function Home() {
+  const {active, setActive} = useContext(CardActionsContext)
+
   const [dataNames, setDataNames] = useState<
     NameAnimaisAndDonosType[] | null | undefined
   >([]);
-  const [ativo, setAtivo] = useState(false);
+
   const refs = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    (async () => {
+      setDataNames(await RequestAnimaisAndDonos());
+    })();
+  }, []);
+
   useEffect(() => {
     const handleAtivo = (event: MouseEvent) => {
       if (!refs.current?.contains(event.target as Node)) {
-        setAtivo(false);
+        setActive(false);
       }
     };
-    if (ativo) {
+    if (active) {
       document.addEventListener("click", handleAtivo);
     }
 
+<<<<<<< HEAD
     const RequestAnimaisAndDonos = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/nomes/animal/dono`);
@@ -41,16 +58,21 @@ export default function Home() {
 
     RequestAnimaisAndDonos();
 
+=======
+>>>>>>> 71bb7b3 (feat: update in cards)
     return () => {
       document.removeEventListener("click", handleAtivo);
     };
-  }, [ativo]);
+  }, [active]);
 
   return (
     <div className="px-[65px] py-[30px]">
-      {ativo ? (
+      {active ? (
         <div ref={refs} className="flex justify-center">
-          <CardActions />
+          <CardActions
+            cardType="Cadastro"
+            Desable={() => setActive((prev: boolean) => !prev)}
+          />
         </div>
       ) : null}
       <Header />
@@ -65,7 +87,7 @@ export default function Home() {
           </button>
         </div>
         <button
-          onClick={() => setAtivo((prev) => !prev)}
+          onClick={() => setActive((prev: boolean) => !prev)}
           className="px-8 py-3 bg-linear-to-br from-[#00c1fa] to-[#0059e3] rounded-[12px]"
         >
           Cadastrar
