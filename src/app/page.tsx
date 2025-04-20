@@ -26,6 +26,7 @@ export default function Home() {
   const [dataNames, setDataNames] = useState<
     NameAnimaisAndDonosType[] | null | undefined
   >([]);
+  const {setTypes} = useContext(CardActionsContext)
 
   const refs = useRef<HTMLDivElement>(null);
 
@@ -67,13 +68,12 @@ export default function Home() {
       {active ? (
         <div ref={refs} className="flex justify-center">
           <CardActions
-            cardType="Cadastro"
             Desable={() => setActive((prev: boolean) => !prev)}
           />
         </div>
       ) : null}
       <Header />
-      <div className="my-6 flex gap-2">
+      <div className="my-4 flex gap-2">
         <div className="inline-flex items-center w-[85%] relative">
           <input
             className="border-3 w-[100%] border-[#404a5c] p-3 rounded-[12px]"
@@ -84,8 +84,8 @@ export default function Home() {
           </button>
         </div>
         <button
-          onClick={() => setActive((prev: boolean) => !prev)}
-          className="px-8 py-3 bg-linear-to-br from-[#00c1fa] to-[#0059e3] rounded-[12px]"
+          onClick={() => {setActive((prev: boolean) => !prev); setTypes("Cadastrar")}}
+          className="py-3 bg-linear-to-br from-[#00c1fa] w-[calc(100%_-_85%)] to-[#0059e3] rounded-[12px]"
         >
           Cadastrar
         </button>

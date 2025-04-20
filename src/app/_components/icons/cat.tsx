@@ -1,4 +1,4 @@
-export const CatIcon = () => {
+export const Cat = () => {
   return (
     <svg
       width="45"

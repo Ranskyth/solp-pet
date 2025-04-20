@@ -3,7 +3,9 @@ import { InputDate } from "./input-date";
 import { InputRadio } from "./input-radio";
 import { InputText } from "./input-text";
 
+
 export const Input = ({ type, label, id, placeholder }: InputType) => {
+
   return (
     <>
       <div>

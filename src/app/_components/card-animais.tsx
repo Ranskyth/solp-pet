@@ -6,7 +6,7 @@ import { CardActionsContext } from "./context/card-actions-context";
 
 export const CardAnimais = ({ nome, dono }: { nome: string; dono: string }) => {
   const [buttonActive, setButtonActive] = useState(false);
-  const { setActive } = useContext(CardActionsContext);
+  const { setActive, setTypes } = useContext(CardActionsContext);
   const isCard = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,6 +57,7 @@ export const CardAnimais = ({ nome, dono }: { nome: string; dono: string }) => {
             <Button
               text="Editar"
               click={() => {
+                setTypes("Editar")
                 setActive((prev: boolean) => !prev);
                 setButtonActive((prev) => !prev);
               }}
@@ -64,6 +65,7 @@ export const CardAnimais = ({ nome, dono }: { nome: string; dono: string }) => {
             <Button
               text="Remover"
               click={() => {
+                setTypes("Deletar")
                 setActive((prev: boolean) => !prev);
                 setButtonActive((prev) => !prev);
               }}

@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { FormEvent } from "react";
+import { FormEvent, useContext } from "react";
 import { Icon } from "./icon";
 import { Exit } from "./icons/exit";
 import { Input } from "./input";
 import { BACKEND_API } from "../api/api";
 import { Button } from "./button";
+import { CardActionsContext } from "./context/card-actions-context";
 
-
-interface Props{
-  Desable?: () => void,
-  cardType?: "Cadastro" | "Editar" | "Deletar"
+interface Props {
+  Desable?: () => void;
 }
 
-export const CardActions = ({ Desable, cardType }: Props) => {
-  
+export const CardActions = ({ Desable }: Props) => {
+  const { types } = useContext(CardActionsContext);
+
   const handleDeletar = () => {
     console.log("Delete");
   };
@@ -51,8 +51,21 @@ export const CardActions = ({ Desable, cardType }: Props) => {
     <div className="w-[750px] border-4 border-[#0058e2] h-[580px] rounded-2xl p-20 bg-[#011e4d] z-10 absolute">
       <div className="flex items-center justify-between">
         <div className="flex gap-4 items-center">
-          <Icon icon={1} />
-          <span>Cadastrar</span>
+          {types == "Deletar" ? (
+            <>
+              <Icon icon={2} /> <span>Deletar</span>
+            </>
+          ) : null}
+          {types == "Editar" ? (
+            <>
+              <Icon icon={3} /> <span>Editar</span>
+            </>
+          ) : null}
+          {types == "Cadastrar" ? (
+            <>
+              <Icon icon={1} /> <span>Cadastrar</span>
+            </>
+          ) : null}
         </div>
         <button
           onClick={() => {
@@ -63,7 +76,15 @@ export const CardActions = ({ Desable, cardType }: Props) => {
         </button>
       </div>
       <form
-        onSubmit={handleCadastrar}
+        onSubmit={
+          types == "Cadastrar"
+            ? handleCadastrar
+            : types == "Deletar"
+            ? handleDeletar
+            : types == "Editar"
+            ? handleEditar
+            : undefined
+        }
         className="mt-10 gap-x-12 gap-y-1.5 grid grid-cols-2 grid-rows-3"
       >
         <div>
@@ -94,13 +115,25 @@ export const CardActions = ({ Desable, cardType }: Props) => {
         <div className="mt-10">
           <Button
             click={() => {
-              cardType == "Cadastro"
-                ? handleCadastrar
-                : cardType == "Deletar"
-                ? handleDeletar
-                : handleEditar;
+              if (types == "Cadastrar") {
+                alert("Cadastrado com sucesso");
+              } else if (types == "Deletar") {
+                alert("Deletado com sucesso");
+              } else if (types == "Editar") {
+                alert("Editado com sucesso");
+              } else {
+                null;
+              }
             }}
-            text="Cadastrar"
+            text={
+              types == "Cadastrar"
+                ? "Cadastrar"
+                : types == "Deletar"
+                ? "Deletar"
+                : types == "Editar"
+                ? "Editar"
+                : ""
+            }
           />
         </div>
       </form>

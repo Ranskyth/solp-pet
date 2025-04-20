@@ -1,8 +1,18 @@
-import { CatIcon } from "./icons/cat";
+import { Cat } from "./icons/cat";
 import { Add } from "./icons/add";
+import { Deletar } from "./icons/deletar";
+import { Edit } from "./icons/edit";
+import { Dog } from "./icons/dog";
+
 
 export const Icon = ({ icon }: { icon: number }) => {
-  const Icons = [{ icon: CatIcon }, { icon: Add }];
+  const Icons = [
+    { icon: Cat },
+    { icon: Add },
+    { icon: Deletar },
+    { icon: Edit },
+    { icon: Dog}
+  ];
 
   const SeletecIcon = Icons[icon].icon;
 
