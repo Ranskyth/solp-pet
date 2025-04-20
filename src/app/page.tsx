@@ -8,6 +8,7 @@ import { CardActions } from "./_components/card-actions";
 import { NameAnimaisAndDonosType } from "@/types/NameAnimaisAndDonosType";
 import { BACKEND_API } from "./api/api";
 import { CardActionsContext } from "./_components/context/card-actions-context";
+import { Spinner } from "./_components/icons/spinner";
 
 const RequestAnimaisAndDonos = async () => {
   try {
@@ -63,6 +64,10 @@ export default function Home() {
     };
   }, [active]);
 
+  console.log(dataNames)
+
+  
+
   return (
     <div className="px-[65px] py-[30px]">
       {active ? (
@@ -91,6 +96,9 @@ export default function Home() {
         </button>
       </div>
 
+      {dataNames?.length == 0 ? <div className="flex w-full items-center justify-center"><Spinner/></div> : 
+
+<>
       <div className="grid gap-4 grid-cols-4 grid-rows-4">
         {dataNames?.map((x) => (
           <CardAnimais key={x.nome} nome={x.nome} dono={x.dono.nome} />
@@ -98,6 +106,8 @@ export default function Home() {
       </div>
 
       <Pagination />
+</>
+}
     </div>
   );
 }
