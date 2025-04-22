@@ -12,7 +12,7 @@ import { Spinner } from "./_components/icons/spinner";
 
 const RequestAnimaisAndDonos = async () => {
   try {
-    const res = await fetch(`${BACKEND_API}/nomes/animal/dono`);
+    const res = await fetch(`${BACKEND_API}/pet/dono`);
     const resjson = await res.json();
     return resjson;
   } catch (error) {
@@ -23,6 +23,7 @@ const RequestAnimaisAndDonos = async () => {
 
 export default function Home() {
   const {active, setActive} = useContext(CardActionsContext)
+  const [loading, setloading] = useState(true)
 
   const [dataNames, setDataNames] = useState<
     NameAnimaisAndDonosType[] | null | undefined
@@ -47,17 +48,9 @@ export default function Home() {
       document.addEventListener("click", handleAtivo);
     }
 
-    const RequestAnimaisAndDonos = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/nomes/animal/dono`);
-        const resjson = await res.json();
-        setDataNames(resjson);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     RequestAnimaisAndDonos();
+
+    setloading(false)
 
     return () => {
       document.removeEventListener("click", handleAtivo);
@@ -96,16 +89,21 @@ export default function Home() {
         </button>
       </div>
 
-      {dataNames?.length == 0 ? <div className="flex w-full items-center justify-center"><Spinner/></div> : 
+      {loading ? <div className="flex w-full items-center justify-center"><Spinner/></div> : 
 
 <>
+{dataNames?.length == 0 ? <>
+<h1>Nenhum Animal Cadastrado</h1>
+</> : <>
+
       <div className="grid gap-4 grid-cols-4 grid-rows-4">
         {dataNames?.map((x) => (
-          <CardAnimais key={x.nome} nome={x.nome} dono={x.dono.nome} />
+          <CardAnimais key={x.dono.id} id={x.dono.id} idade={x.nascimento} raca={x.raca} telefone={x.dono.telefone}  nome={x.nome} dono={x.dono.nome} />
         ))}
       </div>
 
       <Pagination />
+</>}
 </>
 }
     </div>

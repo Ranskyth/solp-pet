@@ -7,16 +7,20 @@ import { BACKEND_API } from "../api/api";
 import { Button } from "./button";
 import { CardActionsContext } from "./context/card-actions-context";
 
+
 interface Props {
   Desable?: () => void;
 }
 
 export const CardActions = ({ Desable }: Props) => {
-  const { types } = useContext(CardActionsContext);
+  const { types, id } = useContext(CardActionsContext);
 
   const handleDeletar = () => {
-    console.log("Delete");
+
+   fetch(`${BACKEND_API}/donos/${id}`, {method:"DELETE"})
+
   };
+
 
   const handleEditar = () => {
     console.log("Editar");
@@ -45,6 +49,7 @@ export const CardActions = ({ Desable }: Props) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+    location.reload()
   };
 
   return (
@@ -119,6 +124,7 @@ export const CardActions = ({ Desable }: Props) => {
                 alert("Cadastrado com sucesso");
               } else if (types == "Deletar") {
                 alert("Deletado com sucesso");
+         
               } else if (types == "Editar") {
                 alert("Editado com sucesso");
               } else {

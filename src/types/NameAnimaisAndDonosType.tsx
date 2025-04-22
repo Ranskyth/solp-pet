@@ -1,6 +1,10 @@
 export interface NameAnimaisAndDonosType {
-    nome: string;
-    dono: {
+  nome: string;
+  nascimento: string;
+  raca: string;
+  dono: {
+      id:string; 
       nome: string;
+      telefone: string;
     };
   }

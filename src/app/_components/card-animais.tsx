@@ -4,9 +4,9 @@ import { Icon } from "./icon";
 import { Button } from "./button";
 import { CardActionsContext } from "./context/card-actions-context";
 
-export const CardAnimais = ({ nome, dono }: { nome: string; dono: string }) => {
+export const CardAnimais = ({ id, nome, dono, raca, telefone, idade }: { id : string, raca : string, telefone : string, idade:string; nome: string; dono: string }) => {
   const [buttonActive, setButtonActive] = useState(false);
-  const { setActive, setTypes } = useContext(CardActionsContext);
+  const { setActive, setTypes, setId } = useContext(CardActionsContext);
   const isCard = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,14 +50,15 @@ export const CardAnimais = ({ nome, dono }: { nome: string; dono: string }) => {
           className="z-10 absolute bg-gradient-to-br from-[#011e4d] to-[#000915] mt-4 border-4
     border-[#01c6fb] rounded-2xl w-full h-52 p-2"
         >
-          <h1>Raça : {}</h1>
-          <h1>Telefone : {}</h1>
-          <h1>Idade : {}</h1>
+          <h1>Raça : {raca}</h1>
+          <h1>Telefone : {telefone}</h1>
+          <h1>Idade : {idade}</h1>
           <div className="flex flex-col gap-2">
             <Button
               text="Editar"
               click={() => {
                 setTypes("Editar")
+                setId(id)
                 setActive((prev: boolean) => !prev);
                 setButtonActive((prev) => !prev);
               }}
@@ -66,6 +67,7 @@ export const CardAnimais = ({ nome, dono }: { nome: string; dono: string }) => {
               text="Remover"
               click={() => {
                 setTypes("Deletar")
+                setId(id)
                 setActive((prev: boolean) => !prev);
                 setButtonActive((prev) => !prev);
               }}
