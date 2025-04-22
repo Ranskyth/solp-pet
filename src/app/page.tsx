@@ -39,6 +39,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    ( async () => {
     const handleAtivo = (event: MouseEvent) => {
       if (!refs.current?.contains(event.target as Node)) {
         setActive(false);
@@ -48,13 +49,14 @@ export default function Home() {
       document.addEventListener("click", handleAtivo);
     }
 
-    RequestAnimaisAndDonos();
+    await RequestAnimaisAndDonos();
 
     setloading(false)
 
     return () => {
       document.removeEventListener("click", handleAtivo);
     };
+  })()
   }, [active]);
 
   console.log(dataNames)
