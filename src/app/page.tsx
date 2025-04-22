@@ -22,13 +22,13 @@ const RequestAnimaisAndDonos = async () => {
 };
 
 export default function Home() {
-  const {active, setActive} = useContext(CardActionsContext)
-  const [loading, setloading] = useState(true)
+  const { active, setActive } = useContext(CardActionsContext);
+  const [loading, setloading] = useState(true);
 
   const [dataNames, setDataNames] = useState<
     NameAnimaisAndDonosType[] | null | undefined
   >([]);
-  const {setTypes} = useContext(CardActionsContext)
+  const { setTypes } = useContext(CardActionsContext);
 
   const refs = useRef<HTMLDivElement>(null);
 
@@ -39,7 +39,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    ( async () => {
     const handleAtivo = (event: MouseEvent) => {
       if (!refs.current?.contains(event.target as Node)) {
         setActive(false);
@@ -49,27 +48,20 @@ export default function Home() {
       document.addEventListener("click", handleAtivo);
     }
 
-    await RequestAnimaisAndDonos();
-
-    setloading(false)
+    setloading(false);
 
     return () => {
       document.removeEventListener("click", handleAtivo);
     };
-  })()
   }, [active]);
 
-  console.log(dataNames)
-
-  
+  console.log(dataNames);
 
   return (
     <div className="px-[65px] py-[30px]">
       {active ? (
         <div ref={refs} className="flex justify-center">
-          <CardActions
-            Desable={() => setActive((prev: boolean) => !prev)}
-          />
+          <CardActions Desable={() => setActive((prev: boolean) => !prev)} />
         </div>
       ) : null}
       <Header />
@@ -84,30 +76,47 @@ export default function Home() {
           </button>
         </div>
         <button
-          onClick={() => {setActive((prev: boolean) => !prev); setTypes("Cadastrar")}}
+          onClick={() => {
+            setActive((prev: boolean) => !prev);
+            setTypes("Cadastrar");
+          }}
           className="py-3 bg-linear-to-br from-[#00c1fa] w-[calc(100%_-_85%)] to-[#0059e3] rounded-[12px]"
         >
           Cadastrar
         </button>
       </div>
 
-      {loading ? <div className="flex w-full items-center justify-center"><Spinner/></div> : 
+      {loading ? (
+        <div className="flex w-full items-center justify-center">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          {dataNames?.length == 0 ? (
+            <>
+              <h1>Nenhum Animal Cadastrado</h1>
+            </>
+          ) : (
+            <>
+              <div className="grid gap-4 grid-cols-4 grid-rows-4">
+                {dataNames?.map((x) => (
+                  <CardAnimais
+                    key={x.dono.id}
+                    id={x.dono.id}
+                    idade={x.nascimento}
+                    raca={x.raca}
+                    telefone={x.dono.telefone}
+                    nome={x.nome}
+                    dono={x.dono.nome}
+                  />
+                ))}
+              </div>
 
-<>
-{dataNames?.length == 0 ? <>
-<h1>Nenhum Animal Cadastrado</h1>
-</> : <>
-
-      <div className="grid gap-4 grid-cols-4 grid-rows-4">
-        {dataNames?.map((x) => (
-          <CardAnimais key={x.dono.id} id={x.dono.id} idade={x.nascimento} raca={x.raca} telefone={x.dono.telefone}  nome={x.nome} dono={x.dono.nome} />
-        ))}
-      </div>
-
-      <Pagination />
-</>}
-</>
-}
+              <Pagination />
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }
