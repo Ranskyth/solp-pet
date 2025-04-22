@@ -10,24 +10,14 @@
 
 Para rodar o projeto localmente, siga os passos abaixo:
 
-Clone o repositório:
 ```bash
-git clone https://link-para-o-projeto
-```
+git clone https://github.com/Ranskyth/solp-pet-frontend
 
-Entre no diretório do projeto:
-```bash
 cd solp-pet
-```
 
-Instale as dependências:
-```bash
 npm install
-```
 
-Inicie o servidor:
-```bash
-npm run start
+npm run dev
 ```
 
 <br>
