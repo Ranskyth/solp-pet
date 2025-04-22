@@ -18,16 +18,16 @@ export class AppController {
 
   @Post('/donos')
   async createDono(@Body() body: any) {
-    try{
+    try {
       const { nome, animal, telefone } = body;
 
-      console.log(nome,telefone,animal)
-  
+      console.log(nome, telefone, animal)
+
       const db = await this.prisma.dono.create({
-        data: { nome, telefone, animal},
+        data: { nome, telefone, animal },
       });
       return { mensagem: `Dono criado com sucesso com o id : ${db.id}` };
-    }catch{
+    } catch {
       return {
         mensagem: "error ao fazer o cadastro"
       }
@@ -49,14 +49,14 @@ export class AppController {
       mensagem: `Deletado o Dono com ID : ${Data.id}`,
     };
   }
-  @Get('/nomes/animal/dono')
+  @Get('/pet/dono')
   async getAnimal() {
-    try{
-      const animaisOnDonos = await this.prisma.animal.findMany({ select: { nome: true, dono: { select: { nome: true } } } });
-  
+    try {
+      const animaisOnDonos = await this.prisma.animal.findMany({ select: {nome: true,raca:true,nascimento:true, dono: { select: { id: true, nome: true, telefone : true } } } });
+
       return animaisOnDonos;
-    }catch(error){
-      return{error:`error in ${error}`}
+    } catch (error) {
+      return { error: `error in ${error}` }
     }
   }
   @Get('/donos')
@@ -64,13 +64,13 @@ export class AppController {
     try {
       const donos = await this.prisma.dono.findMany();
 
-    if(donos == undefined || donos == null){
-      return {mensagem : "nenhum cadastro no banco de dados"}
-    }
+      if (donos == undefined || donos == null) {
+        return { mensagem: "nenhum cadastro no banco de dados" }
+      }
 
-    return donos;
-    }catch{
-      return {error : "error in donos"}
+      return donos;
+    } catch {
+      return { error: "error in donos" }
     }
   }
   @Put('/donos/:id')
