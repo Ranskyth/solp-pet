@@ -24,7 +24,6 @@ const RequestAnimaisAndDonos = async () => {
 export default function Home() {
   const { active, setActive } = useContext(CardActionsContext);
   const [loading, setloading] = useState(true);
-
   const [dataNames, setDataNames] = useState<
     NameAnimaisAndDonosType[] | null | undefined
   >([]);
@@ -35,6 +34,8 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       setDataNames(await RequestAnimaisAndDonos());
+
+      setloading(false);
     })();
   }, []);
 
@@ -48,14 +49,13 @@ export default function Home() {
       document.addEventListener("click", handleAtivo);
     }
 
-    setloading(false);
+    
 
     return () => {
       document.removeEventListener("click", handleAtivo);
     };
   }, [active]);
 
-  console.log(dataNames);
 
   return (
     <div className="px-[65px] py-[30px]">
