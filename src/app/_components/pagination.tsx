@@ -1,6 +1,6 @@
 export const Pagination = () => {
   return (
-    <div className="flex mt-4 gap-1 justify-end">
+    <div className="flex mt-4 gap-1 items-end justify-end">
       <button>
         <img src="down.svg" alt="" />
       </button>

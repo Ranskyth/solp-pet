@@ -58,14 +58,14 @@ export default function Home() {
 
 
   return (
-    <div className="px-[65px] py-[30px]">
+    <div className="px-[65px] py-[30px] max-[760px]:py-[0px]">
       {active ? (
         <div ref={refs} className="flex justify-center">
           <CardActions Desable={() => setActive((prev: boolean) => !prev)} />
         </div>
       ) : null}
       <Header />
-      <div className="my-4 flex gap-2">
+      <div className="max-[760px]:hidden my-4 flex gap-2">
         <div className="inline-flex items-center w-[85%] relative">
           <input
             className="border-3 w-[100%] border-[#404a5c] p-3 rounded-[12px]"
@@ -98,7 +98,7 @@ export default function Home() {
             </>
           ) : (
             <>
-              <div className="grid gap-4 grid-cols-4 grid-rows-4">
+              <div className="grid gap-4 max-[760px]:grid-cols-1 max-[800px]:grid-cols-2 max-[1032px]:grid-cols-3 grid-cols-4  grid-rows-4">
                 {dataNames?.map((x) => (
                   <CardAnimais
                     key={x.dono.id}

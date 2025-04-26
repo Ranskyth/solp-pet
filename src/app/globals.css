@@ -10,7 +10,7 @@ body {
   margin: 0;
   box-sizing: border-box;
   background-attachment: fixed;
-  min-height: 100vh;
+  min-height: 100svh;
   background-image: linear-gradient(to left top, #00183c, #001634, #01142b, #021123, #010d1b, #010d1b, #010d1b, #010d1b, #021123, #01142b, #001634, #00183c);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
