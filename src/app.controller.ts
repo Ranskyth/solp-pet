@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable prettier/prettier */
-
 import {
   Body,
   Controller,
@@ -27,11 +26,19 @@ export class AppController {
         data: { nome, telefone, animal },
       });
       return { mensagem: `Dono criado com sucesso com o id : ${db.id}` };
-    } catch {
+    } catch(error){
       return {
-        mensagem: "error ao fazer o cadastro"
+        mensagem: "error ao fazer o cadastro",
+        error:error
       }
     }
+  }
+  @Get('/animal/dono/:id')
+  GetAll(@Param() param: any){
+    const {id} = param
+    const db = this.prisma.dono.findUnique({where:{id}, select:{animal:true, id: true, nome:true, telefone:true}})
+    
+    return db
   }
   @Get()
   Main() {
