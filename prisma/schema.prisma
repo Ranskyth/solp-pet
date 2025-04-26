@@ -38,7 +38,7 @@ model Dono {
   id       String     @id @default(uuid())
   nome     String
   telefone String?
-  animal   Animal[]
+  animal   Animal?
 
   create_at DateTime @default(now())
 
