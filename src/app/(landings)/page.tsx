@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Header } from "./_components/header";
-import { Pagination } from "./_components/pagination";
-import { CardAnimais } from "./_components/card-animais";
-import { CardActions } from "./_components/card-actions";
+import { Header } from "../_components/header";
+import { Pagination } from "../_components/pagination";
+import { CardAnimais } from "../_components/cards/card-animais";
+import { CardActions } from "../_components/cards/card-actions";
 import { NameAnimaisAndDonosType } from "@/types/NameAnimaisAndDonosType";
-import { BACKEND_API } from "./api/api";
-import { CardActionsContext } from "./_components/context/card-actions-context";
-import { Spinner } from "./_components/icons/spinner";
+import { BACKEND_API } from "../api/api";
+import { CardActionsContext } from "../_components/context/card-actions-context";
+import { Spinner } from "../_components/icons/spinner";
 
 const RequestAnimaisAndDonos = async () => {
   try {
@@ -20,6 +20,7 @@ const RequestAnimaisAndDonos = async () => {
     return false;
   }
 };
+
 
 export default function Home() {
   const { active, setActive } = useContext(CardActionsContext);

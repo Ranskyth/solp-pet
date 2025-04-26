@@ -1,13 +1,35 @@
 /* eslint-disable @next/next/no-img-element */
 import { useContext, useEffect, useRef, useState } from "react";
-import { Icon } from "./icon";
-import { Button } from "./button";
-import { CardActionsContext } from "./context/card-actions-context";
+import { Icon } from "../icon";
+import { Button } from "../button";
+import { CardActionsContext } from "../context/card-actions-context";
+import { BACKEND_API } from "../../api/api";
 
-export const CardAnimais = ({ id, nome, dono, raca, telefone, idade }: { id : string, raca : string, telefone : string, idade:string; nome: string; dono: string }) => {
+export const CardAnimais = ({
+  id,
+  nome,
+  dono,
+  raca,
+  telefone,
+  idade,
+}: {
+  id: string;
+  raca: string;
+  telefone: string;
+  idade: string;
+  nome: string;
+  dono: string;
+}) => {
   const [buttonActive, setButtonActive] = useState(false);
-  const { setActive, setTypes, setId } = useContext(CardActionsContext);
+  const { setActive, setTypes, setId, setDataForms } =
+    useContext(CardActionsContext);
   const isCard = useRef<HTMLDivElement>(null);
+
+  const DataForms = async () => {
+    const res = await fetch(`${BACKEND_API}/animal/dono/${id}`);
+    const resjson = await res.json();
+    setDataForms(resjson);
+  };
 
   useEffect(() => {
     const handleIsCard = (event: MouseEvent) => {
@@ -57,8 +79,9 @@ export const CardAnimais = ({ id, nome, dono, raca, telefone, idade }: { id : st
             <Button
               text="Editar"
               click={() => {
-                setTypes("Editar")
-                setId(id)
+                setTypes("Editar");
+                setId(id);
+                setDataForms(DataForms);
                 setActive((prev: boolean) => !prev);
                 setButtonActive((prev) => !prev);
               }}
@@ -66,8 +89,9 @@ export const CardAnimais = ({ id, nome, dono, raca, telefone, idade }: { id : st
             <Button
               text="Remover"
               click={() => {
-                setTypes("Deletar")
-                setId(id)
+                setDataForms(DataForms);
+                setTypes("Deletar");
+                setId(id);
                 setActive((prev: boolean) => !prev);
                 setButtonActive((prev) => !prev);
               }}

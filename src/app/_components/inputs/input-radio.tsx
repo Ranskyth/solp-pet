@@ -1,11 +1,15 @@
 import { InputType } from "@/types/InputType";
-import { CardActionsContext } from "./context/card-actions-context";
+import { CardActionsContext } from "../context/card-actions-context";
 import { useContext } from "react";
 
 
-export const InputRadio = ({ name, placeholder }: InputType) => {
+export const InputRadio = ({ name, placeholder, label }: InputType) => {
   const { types } = useContext(CardActionsContext)
   return (
+    <>
+  <div>
+    <label htmlFor="nome">{label}</label>
+  </div>
     <div className="flex gap-2">
       <div className="flex gap-2 border-4 pl-2 w-[130px] rounded-[12px] py-2 border-white">
         <input
@@ -28,5 +32,6 @@ export const InputRadio = ({ name, placeholder }: InputType) => {
         <p>Gato</p>
       </div>
     </div>
+    </>
   );
 };

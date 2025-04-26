@@ -1,31 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { FormEvent, useContext } from "react";
-import { Icon } from "./icon";
-import { Exit } from "./icons/exit";
-import { Input } from "./input";
-import { BACKEND_API } from "../api/api";
-import { Button } from "./button";
-import { CardActionsContext } from "./context/card-actions-context";
-
+import { FormEvent, useContext, useState } from "react";
+import { Icon } from "../icon";
+import { Exit } from "../icons/exit";
+import { BACKEND_API } from "../../api/api";
+import { Button } from "../button";
+import { CardActionsContext } from "../context/card-actions-context";
+import { InputText } from "../inputs/input-text";
+import { InputRadio } from "../inputs/input-radio";
+import { InputDate } from "../inputs/input-date";
 
 interface Props {
   Desable?: () => void;
 }
 
 export const CardActions = ({ Desable }: Props) => {
-  const { types, id } = useContext(CardActionsContext);
+  const { types, id, dataForms } = useContext(CardActionsContext);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [form, setForm] = useState({
+    id: "",
+    nome: "",
+    telefone: "",
+    animal: {
+      nome: "",
+      tipo: "",
+      nascimento: "",
+      raca: "",
+    },
+  });
 
   const handleDeletar = () => {
-
-   fetch(`${BACKEND_API}/donos/${id}`, {method:"DELETE"})
-
+    fetch(`${BACKEND_API}/donos/${id}`, { method: "DELETE" });
   };
 
-
-  const handleEditar = () => {
-    console.log("Editar");
+  const handleEditar = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
   };
-
+  console.log(dataForms);
   const handleCadastrar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -49,8 +59,10 @@ export const CardActions = ({ Desable }: Props) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    location.reload()
+    location.reload();
   };
+  console.log(form)
+
 
   return (
     <div className="w-[750px] border-4 border-[#0058e2] h-[580px] rounded-2xl p-20 bg-[#011e4d] z-10 absolute">
@@ -93,26 +105,55 @@ export const CardActions = ({ Desable }: Props) => {
         className="mt-10 gap-x-12 gap-y-1.5 grid grid-cols-2 grid-rows-3"
       >
         <div>
-          <Input label="Nome" id="nome" placeholder="Nome Completo" />
+          <InputText
+            label="Nome Do Pet"
+            change={(e) => setForm({...form, animal:{...form.animal,nome:e.target.value}})}
+            name="nome"
+            value={types == "Deletar" || types == "Editar" ? dataForms?.animal?.nome : form.animal.nome}
+            placeholder="Nome Completo"
+            
+          />
         </div>
         <div>
-          <Input label="Animal" id="animal" type="Radio" />
+          <InputRadio
+            label="Animal"
+            value={types == "Deletar" || types == "Editar" ? dataForms?.animal?.tipo : ""}
+            name="animal"
+          />
         </div>
         <div>
-          <Input label="Dono" id="nomeDono" placeholder="Nome Completo" />
+          <InputText
+            label="Nome do Dono"
+            change={(e) => setForm({...form, nome:e.target.value})}
+            value={types == "Deletar" || types == "Editar" ? dataForms?.animal?.nome : form.nome}
+            name="nomeDono"
+            placeholder="Nome Completo"
+          />
         </div>
         <div>
-          <Input label="Raca" id="raca" placeholder="Raça" />
+          <InputText
+            label="Raca"
+            value={types == "Deletar" || types == "Editar" ? dataForms?.animal?.raca : form.animal.raca}
+            change={(e) => setForm({...form, animal:{...form.animal, raca:e.target.value}})}
+            name="raca"
+            placeholder="Raça"
+          />
         </div>
         <div>
-          <Input
+          <InputText
+            value={types == "Deletar" || types == "Editar" ? dataForms?.telefone : form.telefone}
+            change={(e) => setForm({...form, telefone:e.target.value})}
             label="Telefone"
-            id="telefone"
+            name="telefone"
             placeholder="(00) 0 0000-0000"
           />
         </div>
         <div>
-          <Input label="Nascimento" id="nascimento" type="Date" />
+          <InputDate
+            value={types == "Deletar" || types == "Editar" ? dataForms?.nascimento : ""}
+            label="Nascimento"
+            name="nascimento"
+          />
         </div>
         <div className="mt-10">
           <Button click={Desable} text="Voltar" />
@@ -124,7 +165,6 @@ export const CardActions = ({ Desable }: Props) => {
                 alert("Cadastrado com sucesso");
               } else if (types == "Deletar") {
                 alert("Deletado com sucesso");
-         
               } else if (types == "Editar") {
                 alert("Editado com sucesso");
               } else {
