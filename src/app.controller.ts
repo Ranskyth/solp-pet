@@ -1,5 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Body,
   Controller,
@@ -22,9 +25,11 @@ export class AppController {
 
       console.log(nome, telefone, animal)
 
+      
       const db = await this.prisma.dono.create({
         data: { nome, telefone, animal },
       });
+    
       return { mensagem: `Dono criado com sucesso com o id : ${db.id}` };
     } catch(error){
       return {
@@ -77,6 +82,7 @@ export class AppController {
 
       return donos;
     } catch {
+  
       return { error: "error in donos" }
     }
   }
