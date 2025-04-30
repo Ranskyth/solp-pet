@@ -55,7 +55,7 @@ export default function Home() {
   }, [active]);
 
   return (
-    <div className="px-[65px] py-[30px] max-[760px]:py-[0px]">
+    <div>
       {active ? (
         <div ref={refs} className="flex justify-center">
           <CardActions Desable={() => setActive((prev: boolean) => !prev)} />

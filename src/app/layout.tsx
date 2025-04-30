@@ -28,7 +28,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CardActionsContextProvider>{children}</CardActionsContextProvider>
+          <main className="h-screen w-screen m-auto px-[10%] py-[2%]">
+          <CardActionsContextProvider>{children}</CardActionsContextProvider>
+          </main>
       </body>
     </html>
   );

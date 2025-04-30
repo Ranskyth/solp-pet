@@ -67,10 +67,23 @@ export const CardActions = ({ Desable }: Props) => {
   const handleCadastrar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const data = {
+      nome: form.nome,
+      telefone: form.telefone,
+      animal: {
+        create: {
+          nome: form.animal.nome,
+          tipo: form.animal.tipo,
+          nascimento: form.animal.nascimento,
+          raca: form.animal.raca,
+        },
+      },
+    };
+
     fetch(`${BACKEND_API}/donos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify(data),
     });
 
     location.reload();
