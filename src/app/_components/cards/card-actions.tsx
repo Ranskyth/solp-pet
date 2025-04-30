@@ -44,6 +44,8 @@ export const CardActions = ({ Desable }: Props) => {
     },
   });
 
+  
+
   useEffect(() => {
     if ((types === "Editar" || types === "Deletar") && dataForms) {
       setForm({
@@ -86,7 +88,9 @@ export const CardActions = ({ Desable }: Props) => {
       body: JSON.stringify(data),
     });
 
-    location.reload();
+    console.log(data)
+
+    //location.reload();
   };
 
   const handleEditar = async (e: FormEvent<HTMLFormElement>) => {
