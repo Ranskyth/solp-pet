@@ -12,7 +12,7 @@ import { Spinner } from "../_components/icons/spinner";
 
 const RequestAnimaisAndDonos = async () => {
   try {
-    const res = await fetch(`${BACKEND_API}/pet/dono`);
+    const res = await fetch(`${BACKEND_API}/donos`);
     const resjson = await res.json();
     return resjson;
   } catch (error) {
