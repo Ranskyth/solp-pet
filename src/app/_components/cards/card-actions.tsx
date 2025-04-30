@@ -87,10 +87,7 @@ export const CardActions = ({ Desable }: Props) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-
-    console.log(data)
-
-    //location.reload();
+    location.reload();
   };
 
   const handleEditar = async (e: FormEvent<HTMLFormElement>) => {
