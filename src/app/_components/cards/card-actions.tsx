@@ -13,16 +13,32 @@ interface Props {
   Desable?: () => void;
 }
 
+type TipoAnimal = "Gato" | "Cachorro";
+
+interface Animal {
+  nome: string;
+  tipo: TipoAnimal;
+  nascimento: string;
+  raca: string;
+}
+
+interface FormState {
+  id: string;
+  nome: string;
+  telefone: string;
+  animal: Animal;
+}
+
 export const CardActions = ({ Desable }: Props) => {
   const { types, id, dataForms } = useContext(CardActionsContext);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [form, setForm] = useState({
+
+  const [form, setForm] = useState<FormState>({
     id: "",
     nome: "",
     telefone: "",
     animal: {
       nome: "",
-      tipo: "",
+      tipo: "Gato",
       nascimento: "",
       raca: "",
     },

@@ -21,7 +21,6 @@ const RequestAnimaisAndDonos = async () => {
   }
 };
 
-
 export default function Home() {
   const { active, setActive } = useContext(CardActionsContext);
   const [loading, setloading] = useState(true);
@@ -50,13 +49,10 @@ export default function Home() {
       document.addEventListener("click", handleAtivo);
     }
 
-    
-
     return () => {
       document.removeEventListener("click", handleAtivo);
     };
   }, [active]);
-
 
   return (
     <div className="px-[65px] py-[30px] max-[760px]:py-[0px]">
@@ -86,7 +82,6 @@ export default function Home() {
           Cadastrar
         </button>
       </div>
-
       {loading ? (
         <div className="flex w-full items-center justify-center">
           <Spinner />
@@ -112,7 +107,6 @@ export default function Home() {
                   />
                 ))}
               </div>
-
               <Pagination />
             </>
           )}
