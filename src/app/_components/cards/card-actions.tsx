@@ -66,7 +66,7 @@ export const CardActions = ({ Desable }: Props) => {
     fetch(`${BACKEND_API}/donos/${id}`, { method: "DELETE" });
   };
 
-  const handleCadastrar = (e: FormEvent<HTMLFormElement>) => {
+  const handleCadastrar = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data = {
@@ -82,11 +82,12 @@ export const CardActions = ({ Desable }: Props) => {
       },
     };
 
-    fetch(`${BACKEND_API}/donos`, {
+    await fetch(`${BACKEND_API}/donos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+    
     location.reload();
   };
 
