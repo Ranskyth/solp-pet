@@ -1,9 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
+"use client"
+
 import { useContext, useEffect, useRef, useState } from "react";
-import { Icon } from "../icon";
-import { Button } from "../button";
 import { CardActionsContext } from "../context/card-actions-context";
-import { BACKEND_API } from "../../api/api";
+import { BACKEND_API } from "@/app/api/api";
+import { Button } from "../button";
+import { Icon } from "../icon";
 
 export const CardAnimais = ({
   id,

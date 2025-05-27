@@ -4,7 +4,7 @@ interface ButtonProps{
     color?: string
 }
 
-export const Button = ({text,click}:ButtonProps) => {
+export const Button = ({text, click}:ButtonProps) => {
 
     return(
         <button

@@ -1,0 +1,23 @@
+{
+  "name": "solp-pet",
+  "version": "1.0.0",
+  "description": "**Solp Pet** é um sistema de gerenciamento de animais, desenvolvido especialmente para Pet Shops.",
+  "scripts": {
+    "dev":"cd frontend && npm run dev & cd backend && npm run start",
+    "config:back":"cd backend && npx prisma db push",
+    "install": "cd frontend && npm i & cd backend && npm i",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ranskyth/solp-pet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ranskyth/solp-pet/issues"
+  },
+  "homepage": "https://github.com/Ranskyth/solp-pet#readme"
+}

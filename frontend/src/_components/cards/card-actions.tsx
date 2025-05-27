@@ -2,16 +2,13 @@
 import { FormEvent, useContext, useEffect, useState } from "react";
 import { Icon } from "../icon";
 import { Exit } from "../icons/exit";
-import { BACKEND_API } from "../../api/api";
+import { BACKEND_API } from "../../app/api/api";
 import { Button } from "../button";
 import { CardActionsContext } from "../context/card-actions-context";
 import { InputText } from "../inputs/input-text";
 import { InputRadio } from "../inputs/input-radio";
 import { InputDate } from "../inputs/input-date";
 
-interface Props {
-  Desable?: () => void;
-}
 
 export type TipoAnimal = "Gato" | "Cachorro" | "";
 
@@ -29,8 +26,8 @@ export interface FormState {
   animal: Animal;
 }
 
-export const CardActions = ({ Desable }: Props) => {
-  const { types, id, dataForms } = useContext(CardActionsContext);
+export const CardActions = () => {
+  const { types, id, dataForms, setActive } = useContext(CardActionsContext);
 
   const [form, setForm] = useState<FormState>({
     id: "",
@@ -136,7 +133,7 @@ export const CardActions = ({ Desable }: Props) => {
             </>
           )}
         </div>
-        <button onClick={() => Desable && Desable()}>
+        <button onClick={() => setActive(false)}>
           <Exit />
         </button>
       </div>
@@ -229,7 +226,7 @@ export const CardActions = ({ Desable }: Props) => {
           />
         </div>
         <div className="mt-10">
-          <Button click={Desable} text="Voltar" />
+          <Button click={() => setActive(false)} text="Voltar" />
         </div>
         <div className="mt-10">
           <Button
