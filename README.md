@@ -2,8 +2,6 @@
 
 **Solp Pet** é um sistema de gerenciamento de animais, desenvolvido especialmente para Pet Shops.  
 
-<img width=250 src="./public/logo.png"/>
-
 <br>
 
 ## 🚀 Rodando localmente
