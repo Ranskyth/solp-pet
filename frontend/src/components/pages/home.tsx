@@ -1,11 +1,11 @@
 "use client"
 
-import { CardActions } from "@/_components/cards/card-actions";
-import { CardAnimais } from "@/_components/cards/card-animais";
-import { CardActionsContext } from "@/_components/context/card-actions-context";
-import { Header } from "@/_components/header";
-import { Spinner } from "@/_components/icons/spinner";
-import { Pagination } from "@/_components/pagination";
+import { CardActions } from "@/components/cards/card-actions";
+import { CardAnimais } from "@/components/cards/card-animais";
+import { CardActionsContext } from "@/components/context/card-actions-context";
+import { Header } from "@/components/header";
+import { Spinner } from "@/components/icons/spinner";
+import { Pagination } from "@/components/pagination";
 import { BACKEND_API } from "@/app/api/api";
 import { NameAnimaisAndDonosType } from "@/types/NameAnimaisAndDonosType";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -89,14 +89,14 @@ export const HomePage = () => {
         </div>
       ) : (
         <>
-          {dataNames?.length == 0 ? (
+          {dataNames && dataNames.length == 0 ? (
             <>
               <h1>Nenhum Animal Cadastrado</h1>
             </>
           ) : (
             <>
               <div className="grid gap-4 max-[760px]:grid-cols-1 max-[800px]:grid-cols-2 max-[1032px]:grid-cols-3 grid-cols-4  grid-rows-4">
-                {dataNames?.map((x) => (
+                {Array.isArray(dataNames) ? dataNames?.map((x) => (
                   <CardAnimais
                     key={x.dono.id}
                     id={x.dono.id}
@@ -106,7 +106,7 @@ export const HomePage = () => {
                     nome={x.nome}
                     dono={x.dono.nome}
                   />
-                ))}
+                )) : []}
               </div>
               <Pagination />
             </>
