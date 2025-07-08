@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prefer-const */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -11,38 +13,41 @@ import {
   Param,
   Post,
   Put,
+  Query,
+  Res,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-
-@Controller()
+import { Response } from 'express';
+@Controller('api/v1')
 export class AppController {
-  constructor(private prisma: PrismaClient) { }
+  constructor(public prisma: PrismaClient) { }
 
-  @Post('/donos')
-  async createDono(@Body() body: any) {
+  @Post('/dono')
+  async createDono(@Body() body: any, @Res() res: Response): Promise<any> {
     try {
       const { nome, animal, telefone } = body;
 
       console.log(nome, telefone, animal)
 
-      
+
       const db = await this.prisma.dono.create({
         data: { nome, telefone, animal },
       });
-    
+
       return { mensagem: `Dono criado com sucesso com o id : ${db.id}` };
-    } catch(error){
+    } catch (error) {
+      res.status(400)
       return {
         mensagem: "error ao fazer o cadastro",
-        error:error
+        error: error
       }
     }
   }
-  @Get('/animal/dono/:id')
-  GetAll(@Param() param: any){
-    const {id} = param
-    const db = this.prisma.dono.findUnique({where:{id}, select:{animal:true, id: true, nome:true, telefone:true}})
-    
+  @Get('/pet/dono/:id')
+  GetAll(@Param() param: any) {
+    const { id } = param
+    const db = this.prisma.dono.findUnique({ where: { id }, select: { animal: true, id: true, nome: true, telefone: true } })
+
     return db
   }
   @Get()
@@ -51,7 +56,8 @@ export class AppController {
       mensagem: 'Bem-Vindo!',
     };
   }
-  @Delete('/donos/:id')
+
+  @Delete('/dono/:id')
   async DeleteDono(@Param() params: any) {
     const { id } = params;
 
@@ -61,32 +67,28 @@ export class AppController {
       mensagem: `Deletado o Dono com ID : ${Data.id}`,
     };
   }
+
+
   @Get('/pet/dono')
-  async getAnimal() {
+  async getAnimal(@Query() query: any) {
     try {
-      const animaisOnDonos = await this.prisma.animal.findMany({ select: {nome: true,raca:true,nascimento:true, dono: { select: { id: true, nome: true, telefone : true } } } });
+      let { pages, nome, tipo } = query as { pages: number, nome: string, tipo:"Gato"|"Cachorro"|""}
 
-      return animaisOnDonos;
+      const limit = 16
+      
+      const animaisOnDonos = await this.prisma.animal.findMany({ orderBy: { nome: "asc" }, where: { nome: { contains: nome, mode:"insensitive" },...(tipo !== "" && { tipo })}, skip: pages == 1 ? 0 : pages * 16 - 16, take: limit, select: { nome: true, tipo: true, raca: true, nascimento: true, dono: { select: { id: true, nome: true, telefone: true } } } });
+      
+      const qtPages = (await this.prisma.animal.findMany({where:{...(tipo !== "" && { tipo })}})).length
+      
+      
+      return { "cadastros": animaisOnDonos, "pages": Math.ceil(qtPages / limit) }
+
     } catch (error) {
-      return { error: `error in ${error}` }
+      return { error }
     }
   }
-  @Get('/donos')
-  async getDonos() {
-    try {
-      const donos = await this.prisma.dono.findMany();
 
-      if (donos == undefined || donos == null) {
-        return { mensagem: "nenhum cadastro no banco de dados" }
-      }
-
-      return donos;
-    } catch {
-  
-      return { error: "error in donos" }
-    }
-  }
-  @Put('/donos/:id')
+  @Put('/dono/:id')
   async UptadeDono(@Param() param: any, @Body() body: any) {
     const { id } = param;
     const { animal, nome, telefone } = body;
@@ -98,11 +100,5 @@ export class AppController {
     return {
       mensagem: `dono com id : ${db.id} atualizado com sucesso`,
     };
-  }
-  @Get('/pets')
-  async getPets() {
-    const pets = await this.prisma.animal.findMany();
-
-    return pets;
   }
 }

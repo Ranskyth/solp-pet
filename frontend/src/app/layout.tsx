@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CardActionsContextProvider } from "../components/context/card-actions-context";
+import { Toaster } from "sonner";
+import { PaginationProvider } from "@/components/context/pagination-context";
+import { AuthProvider } from "@/components/context/auth-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,9 +31,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <main className="h-screen w-screen m-auto px-[10%] py-[2%]">
-          <CardActionsContextProvider>{children}</CardActionsContextProvider>
-          </main>
+        <main className="h-screen w-screen m-auto px-[10%] py-[2%]">
+          <AuthProvider>
+            <PaginationProvider>
+              <CardActionsContextProvider>
+                {children}
+              </CardActionsContextProvider>
+            </PaginationProvider>
+          </AuthProvider>
+        </main>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

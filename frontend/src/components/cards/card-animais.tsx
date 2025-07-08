@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
 import { useContext, useEffect, useRef, useState } from "react";
 import { CardActionsContext } from "../context/card-actions-context";
 import { BACKEND_API } from "@/app/api/api";
 import { Button } from "../button";
 import { Icon } from "../icon";
+import { getCookie } from "cookies-next";
 
 export const CardAnimais = ({
   id,
@@ -25,14 +26,59 @@ export const CardAnimais = ({
   const { setActive, setTypes, setId, setDataForms } =
     useContext(CardActionsContext);
   const isCard = useRef<HTMLDivElement>(null);
-
+  const [icon, setIcon] = useState<{ animal: { tipo: string } }>();
   const DataForms = async () => {
-    const res = await fetch(`${BACKEND_API}/animal/dono/${id}`);
+    const res = await fetch(`${BACKEND_API}/api/v1/pet/dono/${id}`, {
+      headers: { Authorization: `token ${getCookie("token")}` },
+    });
     const resjson = await res.json();
     setDataForms(resjson);
   };
+  const calcIdade = (nascimentoDate: string) => {
+    const [anoStr, mesStr, diaStr] = nascimentoDate.split("-");
+    const ano = Number(anoStr);
+    const mes = Number(mesStr) - 1;
+    const dia = Number(diaStr);
+
+    const nascimento = new Date(ano, mes, dia);
+    const hoje = new Date();
+
+    let anos = hoje.getFullYear() - nascimento.getFullYear();
+    let meses = hoje.getMonth() - nascimento.getMonth();
+    let dias = hoje.getDate() - nascimento.getDate();
+
+    if (dias < 0) {
+      meses--;
+      const ultimoDiaDoMesAnterior = new Date(
+        hoje.getFullYear(),
+        hoje.getMonth(),
+        0
+      ).getDate();
+      dias += ultimoDiaDoMesAnterior;
+    }
+
+    if (meses < 0) {
+      anos--;
+      meses += 12;
+    }
+
+    const partes = [];
+    if (anos > 0) partes.push(`${anos} ano${anos > 1 ? "s" : ""}`);
+    if (meses > 0) partes.push(`${meses} mês${meses > 1 ? "es" : ""}`);
+    if (dias > 0 || partes.length === 0)
+      partes.push(`${dias} dia${dias > 1 ? "s" : ""}`);
+
+    return partes.join(" e ");
+  };
 
   useEffect(() => {
+    (async () => {
+      const res = await fetch(`${BACKEND_API}/api/v1/pet/dono/${id}`, {
+        headers: { Authorization: `token ${getCookie("token")}` },
+      });
+      const resjson = await res.json();
+      setIcon(resjson);
+    })();
     const handleIsCard = (event: MouseEvent) => {
       if (!isCard.current?.contains(event.target as Node)) {
         setButtonActive(false);
@@ -46,7 +92,7 @@ export const CardAnimais = ({
       document.removeEventListener("click", handleIsCard);
     };
   }, [buttonActive]);
-
+  console.log(icon);
   return (
     <div ref={isCard} className="relative">
       <button
@@ -55,7 +101,8 @@ export const CardAnimais = ({
           buttonActive && `outline-4 outline-[#01c6fb]`
         }`}
       >
-        <Icon icon={0} />
+        {icon?.animal?.tipo == "Gato" ? <Icon icon={0} /> : <Icon icon={4} />}
+
         <div className="ml-5">
           <div className="flex gap-2">
             <img src="Group.svg" alt="" />
@@ -75,7 +122,7 @@ export const CardAnimais = ({
         >
           <h1>Raça : {raca}</h1>
           <h1>Telefone : {telefone}</h1>
-          <h1>Idade : {idade}</h1>
+          <h1>Idade : {calcIdade(idade)}</h1>
           <div className="flex flex-col gap-2">
             <Button
               text="Editar"

@@ -1,9 +1,8 @@
+import { LoginPage } from "@/components/pages/login"
 
 const Login = () => {
     return(
-
-        <h1>oii</h1>
- 
+        <LoginPage/>
     )
 }
 

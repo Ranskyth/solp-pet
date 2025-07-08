@@ -8,6 +8,8 @@ import { CardActionsContext } from "../context/card-actions-context";
 import { InputText } from "../inputs/input-text";
 import { InputRadio } from "../inputs/input-radio";
 import { InputDate } from "../inputs/input-date";
+import { notificationSuccess } from "../notification-success";
+import { getCookie } from "cookies-next";
 
 
 export type TipoAnimal = "Gato" | "Cachorro" | "";
@@ -59,8 +61,10 @@ export const CardActions = () => {
     }
   }, [types, dataForms]);
 
-  const handleDeletar = () => {
-    fetch(`${BACKEND_API}/donos/${id}`, { method: "DELETE" });
+  const handleDeletar = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    await fetch(`${BACKEND_API}/api/v1/dono/${id}`, { method: "DELETE" , headers:{"Authorization":`token ${getCookie("token")}`}});
+    notificationSuccess()
   };
 
   const handleCadastrar = async(e: FormEvent<HTMLFormElement>) => {
@@ -79,13 +83,17 @@ export const CardActions = () => {
       },
     };
 
-    await fetch(`${BACKEND_API}/donos`, {
+    await fetch(`${BACKEND_API}/api/v1/dono`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Authorization":`token ${getCookie("token")}` },
       body: JSON.stringify(data),
     });
-    
-    location.reload();
+
+      notificationSuccess()
+
+
+
+
   };
 
   const handleEditar = async (e: FormEvent<HTMLFormElement>) => {
@@ -104,13 +112,13 @@ export const CardActions = () => {
       },
     };
 
-    await fetch(`${BACKEND_API}/donos/${id}`, {
+    await fetch(`${BACKEND_API}/api/v1/dono/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Authorization":`token ${getCookie("token")}`},
       body: JSON.stringify(data),
+      
     });
-
-    location.reload();
+    notificationSuccess()
   };
 
   return (
@@ -230,11 +238,6 @@ export const CardActions = () => {
         </div>
         <div className="mt-10">
           <Button
-            click={() => {
-              if (types === "Cadastrar") alert("Cadastrado com sucesso");
-              else if (types === "Deletar") alert("Deletado com sucesso");
-              else if (types === "Editar") alert("Editado com sucesso");
-            }}
             text={
               types === "Cadastrar"
                 ? "Cadastrar"
@@ -244,6 +247,7 @@ export const CardActions = () => {
                 ? "Editar"
                 : ""
             }
+            bgcolor={types==="Deletar" ? "bg-[#e94747]": undefined}
           />
         </div>
       </form>

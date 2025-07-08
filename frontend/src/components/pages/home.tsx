@@ -1,4 +1,6 @@
-"use client"
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
 import { CardActions } from "@/components/cards/card-actions";
 import { CardAnimais } from "@/components/cards/card-animais";
@@ -7,38 +9,63 @@ import { Header } from "@/components/header";
 import { Spinner } from "@/components/icons/spinner";
 import { Pagination } from "@/components/pagination";
 import { BACKEND_API } from "@/app/api/api";
-import { NameAnimaisAndDonosType } from "@/types/NameAnimaisAndDonosType";
+import { DonosType } from "@/types/NameAnimaisAndDonosType";
 import { useContext, useEffect, useRef, useState } from "react";
+import { PaginationContext } from "../context/pagination-context";
+import { AuthContext } from "../context/auth-context";
+import { useRouter } from "next/navigation";
+import { getCookie } from "cookies-next";
 
-const RequestAnimaisAndDonos = async () => {
+const RequestAnimaisAndDonos = async (
+  page: any,
+  nome: string,
+  tipo: string
+): Promise<any> => {
   try {
-    const res = await fetch(`${BACKEND_API}/pet/dono`);
-    const resjson = await res.json();
+    const res = await fetch(
+      `${BACKEND_API}/api/v1/pet/dono?pages=${page}&nome=${nome}&tipo=${tipo}`,
+      {
+        headers: { Authorization: `token ${getCookie("token")}` },
+      }
+    );
+    const resjson: DonosType = await res.json();
     return resjson;
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
     return false;
   }
 };
 
 export const HomePage = () => {
-
-         const { active, setActive } = useContext(CardActionsContext);
+  const { page } = useContext(PaginationContext);
+  const router = useRouter();
+  const { active, setActive } = useContext(CardActionsContext);
   const [loading, setloading] = useState(true);
-  const [dataNames, setDataNames] = useState<
-    NameAnimaisAndDonosType[] | null | undefined
-  >([]);
+  const [filtro, setFiltro] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   const { setTypes } = useContext(CardActionsContext);
-
+  const { Auth, user } = useContext(AuthContext);
   const refs = useRef<HTMLDivElement>(null);
+  const [data, setData] = useState<DonosType>({
+    cadastros: {} as DonosType["cadastros"],
+    pages: 1,
+  });
+
+    useEffect(() => {
+      if (Auth == false) {
+        router.push("/login");
+      }
+    },[Auth]);    
+
 
   useEffect(() => {
     (async () => {
-      setDataNames(await RequestAnimaisAndDonos());
+      const req = await RequestAnimaisAndDonos(page, search, filtro);
 
+      setData(req);
       setloading(false);
     })();
-  }, []);
+  }, [page, search, filtro]);
 
   useEffect(() => {
     const handleAtivo = (event: MouseEvent) => {
@@ -55,6 +82,10 @@ export const HomePage = () => {
     };
   }, [active]);
 
+  if (!user.split(".")[2] || !user || !Auth) {
+    return null;
+  }
+
   return (
     <div>
       {active ? (
@@ -62,23 +93,31 @@ export const HomePage = () => {
           <CardActions />
         </div>
       ) : null}
-      <Header />
+      <Header user={user} />
       <div className="max-[760px]:hidden my-4 flex gap-2">
         <div className="inline-flex items-center w-[85%] relative">
           <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="border-3 w-[100%] border-[#404a5c] p-3 rounded-[12px]"
             type="text"
           />
-          <button className="absolute right-[5px] rounded-[8px] px-8 py-2 bg-[#404a5c] font-[700]">
-            Pesquisar
-          </button>
         </div>
+        <select
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+          className="rounded-[12] font-bold text-black bg-linear-to-br from-[#00c1fa] w-[calc(100%_-_85%)] to-[#0059e3] px-2"
+        >
+          <option value="">Todos</option>
+          <option value="Gato">Gatos</option>
+          <option value="Cachorro">Cachorros</option>
+        </select>
         <button
           onClick={() => {
             setActive((prev: boolean) => !prev);
             setTypes("Cadastrar");
           }}
-          className="py-3 bg-linear-to-br from-[#00c1fa] w-[calc(100%_-_85%)] to-[#0059e3] rounded-[12px]"
+          className="py-3 bg-linear-to-br from-[#00c1fa] w-[calc(100%_-_85%)] to-[#0059e3] rounded-[12px] font-bold"
         >
           Cadastrar
         </button>
@@ -89,31 +128,34 @@ export const HomePage = () => {
         </div>
       ) : (
         <>
-          {dataNames && dataNames.length == 0 ? (
+          {data && data?.cadastros?.length == Number(0) ? (
             <>
               <h1>Nenhum Animal Cadastrado</h1>
             </>
           ) : (
             <>
               <div className="grid gap-4 max-[760px]:grid-cols-1 max-[800px]:grid-cols-2 max-[1032px]:grid-cols-3 grid-cols-4  grid-rows-4">
-                {Array.isArray(dataNames) ? dataNames?.map((x) => (
-                  <CardAnimais
-                    key={x.dono.id}
-                    id={x.dono.id}
-                    idade={x.nascimento}
-                    raca={x.raca}
-                    telefone={x.dono.telefone}
-                    nome={x.nome}
-                    dono={x.dono.nome}
-                  />
-                )) : []}
+                {Array.isArray(data.cadastros)
+                  ? data?.cadastros
+                      .filter((x) => (filtro ? x.tipo == filtro : x))
+                      .map((x) => (
+                        <CardAnimais
+                          key={x.dono.id}
+                          id={x.dono.id}
+                          idade={x.nascimento}
+                          raca={x.raca}
+                          telefone={x.dono.telefone}
+                          nome={x.nome}
+                          dono={x.dono.nome}
+                        />
+                      ))
+                  : []}
               </div>
-              <Pagination />
+              <Pagination pages={data.pages} />
             </>
           )}
         </>
       )}
     </div>
   );
-    
-}
+};

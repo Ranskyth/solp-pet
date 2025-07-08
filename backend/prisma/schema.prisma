@@ -44,3 +44,13 @@ model Dono {
 
   @@map("dono")
 }
+
+model User {
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  cpf String @unique
+  password String
+  create_at DateTime @default(now())
+  @@map("user")
+}

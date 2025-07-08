@@ -3,6 +3,7 @@ import { Add } from "./icons/add";
 import { Deletar } from "./icons/deletar";
 import { Edit } from "./icons/edit";
 import { Dog } from "./icons/dog";
+import { Options } from "./icons/options";
 
 
 export const Icon = ({ icon }: { icon: number }) => {
@@ -11,7 +12,8 @@ export const Icon = ({ icon }: { icon: number }) => {
     { icon: Add },
     { icon: Deletar },
     { icon: Edit },
-    { icon: Dog}
+    { icon: Dog},
+    {icon: Options}
   ];
 
   const SeletecIcon = Icons[icon].icon;
