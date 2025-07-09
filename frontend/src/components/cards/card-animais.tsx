@@ -52,7 +52,7 @@ export const CardAnimais = ({
       const ultimoDiaDoMesAnterior = new Date(
         hoje.getFullYear(),
         hoje.getMonth(),
-        0
+        0,
       ).getDate();
       dias += ultimoDiaDoMesAnterior;
     }

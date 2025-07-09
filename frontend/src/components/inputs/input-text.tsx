@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { InputProps } from "@/types/InputType";
 import { CardActionsContext } from "../context/card-actions-context";
 import { useContext } from "react";

@@ -11,7 +11,6 @@ import { InputDate } from "../inputs/input-date";
 import { notificationSuccess } from "../notification-success";
 import { getCookie } from "cookies-next";
 
-
 export type TipoAnimal = "Gato" | "Cachorro" | "";
 
 export interface Animal {
@@ -43,8 +42,6 @@ export const CardActions = () => {
     },
   });
 
-  
-
   useEffect(() => {
     if ((types === "Editar" || types === "Deletar") && dataForms) {
       setForm({
@@ -62,12 +59,15 @@ export const CardActions = () => {
   }, [types, dataForms]);
 
   const handleDeletar = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    await fetch(`${BACKEND_API}/api/v1/dono/${id}`, { method: "DELETE" , headers:{"Authorization":`token ${getCookie("token")}`}});
-    notificationSuccess()
+    e.preventDefault();
+    await fetch(`${BACKEND_API}/api/v1/dono/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `token ${getCookie("token")}` },
+    });
+    notificationSuccess();
   };
 
-  const handleCadastrar = async(e: FormEvent<HTMLFormElement>) => {
+  const handleCadastrar = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data = {
@@ -85,15 +85,14 @@ export const CardActions = () => {
 
     await fetch(`${BACKEND_API}/api/v1/dono`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization":`token ${getCookie("token")}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${getCookie("token")}`,
+      },
       body: JSON.stringify(data),
     });
 
-      notificationSuccess()
-
-
-
-
+    notificationSuccess();
   };
 
   const handleEditar = async (e: FormEvent<HTMLFormElement>) => {
@@ -114,11 +113,13 @@ export const CardActions = () => {
 
     await fetch(`${BACKEND_API}/api/v1/dono/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", "Authorization":`token ${getCookie("token")}`},
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${getCookie("token")}`,
+      },
       body: JSON.stringify(data),
-      
     });
-    notificationSuccess()
+    notificationSuccess();
   };
 
   return (
@@ -151,10 +152,10 @@ export const CardActions = () => {
           types === "Cadastrar"
             ? handleCadastrar
             : types === "Deletar"
-            ? handleDeletar
-            : types === "Editar"
-            ? handleEditar
-            : undefined
+              ? handleDeletar
+              : types === "Editar"
+                ? handleEditar
+                : undefined
         }
         className="mt-10 gap-x-12 gap-y-1.5 grid grid-cols-2 grid-rows-3"
       >
@@ -242,12 +243,12 @@ export const CardActions = () => {
               types === "Cadastrar"
                 ? "Cadastrar"
                 : types === "Deletar"
-                ? "Deletar"
-                : types === "Editar"
-                ? "Editar"
-                : ""
+                  ? "Deletar"
+                  : types === "Editar"
+                    ? "Editar"
+                    : ""
             }
-            bgcolor={types==="Deletar" ? "bg-[#e94747]": undefined}
+            bgcolor={types === "Deletar" ? "bg-[#e94747]" : undefined}
           />
         </div>
       </form>

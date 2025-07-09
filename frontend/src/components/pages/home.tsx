@@ -15,19 +15,23 @@ import { PaginationContext } from "../context/pagination-context";
 import { AuthContext } from "../context/auth-context";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
+import { notificationErro } from "../notification-erro";
 
 const RequestAnimaisAndDonos = async (
   page: any,
   nome: string,
-  tipo: string
+  tipo: string,
 ): Promise<any> => {
   try {
     const res = await fetch(
       `${BACKEND_API}/api/v1/pet/dono?pages=${page}&nome=${nome}&tipo=${tipo}`,
       {
         headers: { Authorization: `token ${getCookie("token")}` },
-      }
+      },
     );
+    if (res.status != 200) {
+      return false;
+    }
     const resjson: DonosType = await res.json();
     return resjson;
   } catch (err) {
@@ -44,24 +48,26 @@ export const HomePage = () => {
   const [filtro, setFiltro] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const { setTypes } = useContext(CardActionsContext);
-  const { Auth, user } = useContext(AuthContext);
+  const { Auth, setAuth, user } = useContext(AuthContext);
   const refs = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<DonosType>({
     cadastros: {} as DonosType["cadastros"],
     pages: 1,
   });
 
-    useEffect(() => {
-      if (Auth == false) {
-        router.push("/login");
-      }
-    },[Auth]);    
-
+  useEffect(() => {
+    if (Auth == false) {
+      router.push("/login");
+    }
+  }, [Auth]);
 
   useEffect(() => {
     (async () => {
       const req = await RequestAnimaisAndDonos(page, search, filtro);
-
+      if (!req) {
+        notificationErro("Não Autenticado");
+        setAuth(false);
+      }
       setData(req);
       setloading(false);
     })();
@@ -83,7 +89,11 @@ export const HomePage = () => {
   }, [active]);
 
   if (!user.split(".")[2] || !user || !Auth) {
-    return null;
+    return (
+      <div className="flex w-full h-full justify-center items-center">
+        <Spinner />
+      </div>
+    );
   }
 
   return (
@@ -93,7 +103,7 @@ export const HomePage = () => {
           <CardActions />
         </div>
       ) : null}
-      <Header user={user} />
+      <Header />
       <div className="max-[760px]:hidden my-4 flex gap-2">
         <div className="inline-flex items-center w-[85%] relative">
           <input

@@ -2,7 +2,13 @@ import { InputProps } from "@/types/InputType";
 import { CardActionsContext } from "../context/card-actions-context";
 import { useContext } from "react";
 
-export const InputRadio = ({ name, label, value, onChange, disabled }: InputProps) => {
+export const InputRadio = ({
+  name,
+  label,
+  value,
+  onChange,
+  disabled,
+}: InputProps) => {
   const { types } = useContext(CardActionsContext);
   return (
     <>

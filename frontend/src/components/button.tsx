@@ -1,11 +1,10 @@
 interface ButtonProps {
   text?: string;
   click?: () => void;
-  bgcolor?: "bg-[#e94747]" | 'bg-[#006DE8]' | 'bg-white';
+  bgcolor?: "bg-[#e94747]" | "bg-[#006DE8]" | "bg-white";
 }
 
-export const Button = ({ text, click, bgcolor ="bg-white" }: ButtonProps) => {
-
+export const Button = ({ text, click, bgcolor = "bg-white" }: ButtonProps) => {
   return (
     <button
       onClick={() => click && click()}

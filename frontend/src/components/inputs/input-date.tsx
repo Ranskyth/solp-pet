@@ -2,7 +2,13 @@ import { InputProps } from "@/types/InputType";
 import { CardActionsContext } from "../context/card-actions-context";
 import { useContext } from "react";
 
-export const InputDate = ({ name, placeholder, label, change, value }: InputProps) => {
+export const InputDate = ({
+  name,
+  placeholder,
+  label,
+  change,
+  value,
+}: InputProps) => {
   const { types } = useContext(CardActionsContext);
   return (
     <>

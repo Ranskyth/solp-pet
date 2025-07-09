@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import { PaginationContext } from "./context/pagination-context";
 
-export const Pagination = ({pages}:{pages?: number}) => {
-
-  const {PaginaAnterior,ProximaPagina,page} = useContext(PaginationContext)
+export const Pagination = ({ pages }: { pages?: number }) => {
+  const { PaginaAnterior, ProximaPagina, page } = useContext(PaginationContext);
 
   return (
     <div className="flex mt-4 gap-1 items-end justify-end">

@@ -8,7 +8,7 @@ export interface InputProps {
   value: any | "Cachorro" | "Gato" | "";
   change?: (e: ChangeEvent<HTMLInputElement>) => void;
   onChange?: (value: "Cachorro" | "Gato") => void;
-  type?: "Text" | "Date" | "Radio"; 
-  disabled?: boolean; 
-  TipoAnimal?: "Gato" | "Cachorro"; 
+  type?: "Text" | "Date" | "Radio";
+  disabled?: boolean;
+  TipoAnimal?: "Gato" | "Cachorro";
 }

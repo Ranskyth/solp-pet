@@ -5,15 +5,14 @@ import { Edit } from "./icons/edit";
 import { Dog } from "./icons/dog";
 import { Options } from "./icons/options";
 
-
 export const Icon = ({ icon }: { icon: number }) => {
   const Icons = [
     { icon: Cat },
     { icon: Add },
     { icon: Deletar },
     { icon: Edit },
-    { icon: Dog},
-    {icon: Options}
+    { icon: Dog },
+    { icon: Options },
   ];
 
   const SeletecIcon = Icons[icon].icon;
